@@ -12,13 +12,14 @@
   :root {
     --dark:    #1c2738;
     --ink:     #1a1a1a;
-    --muted:   #6b6b6b;
+    --muted:   #666;
     --accent:  #3d7ab5;
     --rule:    #e4e4e0;
     --bg:      #f8f8f6;
     --white:   #ffffff;
     --serif:   'Source Serif 4', Georgia, serif;
     --mono:    'DM Mono', monospace;
+    --ease:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   html { scroll-behavior: smooth; }
@@ -27,83 +28,176 @@
     font-family: var(--serif);
     background: var(--bg);
     color: var(--ink);
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
-  .page {
-    max-width: 860px;
-    margin: 0 auto;
-    background: var(--white);
-    box-shadow: 0 0 80px rgba(0,0,0,0.08);
-    min-height: 100vh;
-  }
-
-  /* ── Hero split ── */
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr 340px;
-    min-height: 500px;
-  }
-
-  .hero-left {
-    background: var(--dark);
-    padding: 64px 56px;
+  /* ── Sticky Nav ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 0 48px;
+    height: 56px;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(-100%);
+    transition: transform 0.4s var(--ease);
+    background: rgba(28, 39, 56, 0.97);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.15);
   }
 
-  .hero-label {
+  nav.visible { transform: translateY(0); }
+
+  .nav-name {
     font-family: var(--mono);
-    font-size: 9.5px;
-    letter-spacing: 0.16em;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.8);
+  }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 18px;
-  }
-
-  .hero-name {
-    font-size: 44px;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.05;
-    margin-bottom: 12px;
-  }
-
-  .hero-title {
-    font-size: 14px;
-    font-weight: 300;
-    color: rgba(255,255,255,0.55);
-    line-height: 1.6;
-    margin-bottom: 36px;
-    max-width: 340px;
-  }
-
-  .hero-divider {
-    width: 32px;
-    height: 1px;
-    background: var(--accent);
-    margin-bottom: 28px;
-  }
-
-  .hero-contact {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .contact-item {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.04em;
     color: rgba(255,255,255,0.5);
     text-decoration: none;
     transition: color 0.2s;
   }
 
-  .contact-item:hover { color: var(--white); }
+  .nav-links a:hover { color: var(--white); }
+
+  /* ── Hero ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 42%;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .hero-left {
+    background: var(--dark);
+    padding: 80px 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 0.2s forwards;
+  }
+
+  .hero-name {
+    font-size: clamp(46px, 5.5vw, 72px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.0;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 0.4s forwards;
+  }
+
+  .hero-title {
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 380px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 0.6s forwards;
+  }
+
+  .hero-divider {
+    width: 36px;
+    height: 2px;
+    background: var(--accent);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 0.7s forwards;
+  }
+
+  .hero-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 0.8s forwards;
+  }
+
+  .contact-item {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: fit-content;
+    position: relative;
+  }
+
+  .contact-item:hover { color: rgba(255,255,255,0.9); }
+
+  .copy-tip {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    background: var(--accent);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+  }
+
+  .contact-item.copied .copy-tip { opacity: 1; transform: translateX(0); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 72px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s var(--ease) 1.2s forwards;
+  }
+
+  .hero-scroll span {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,0.3), transparent);
+    animation: scrollPulse 2.5s ease-in-out infinite;
+  }
 
   /* ── Hero foto ── */
   .hero-right {
@@ -116,104 +210,122 @@
     position: absolute;
     bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
-    height: 105%;
+    transform: translateX(-46%);
+    height: 102%;
     width: auto;
     object-fit: contain;
     object-position: bottom center;
+    filter: contrast(1.08) brightness(1.02);
+    opacity: 0;
+    animation: fadeIn 1.2s var(--ease) 0.6s forwards;
   }
 
-  /* ── Secties ── */
-  .section {
-    padding: 44px 64px;
-    border-bottom: 1px solid var(--rule);
-  }
+  /* ── Sections ── */
+  section { padding: 80px 0; border-bottom: 1px solid var(--rule); }
+  section:last-of-type { border-bottom: none; }
 
-  .section:last-child { border-bottom: none; }
+  .section-inner { max-width: 960px; margin: 0 auto; padding: 0 72px; }
 
   .section-label {
     font-family: var(--mono);
     font-size: 9.5px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--accent);
-    margin-bottom: 18px;
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 36px;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--rule);
   }
 
   /* ── Intro ── */
-  .intro p {
-    font-size: 14.5px;
-    line-height: 1.85;
+  .intro-text {
+    font-size: 16px;
+    line-height: 1.9;
     color: var(--ink);
-    max-width: 640px;
+    max-width: 680px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
   }
 
-  /* ── Competenties ── */
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+  .intro-text.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── Tags ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; }
 
   .tag {
     font-family: var(--mono);
     font-size: 10px;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--accent);
-    background: var(--bg);
+    background: var(--white);
     border: 1px solid var(--rule);
-    padding: 5px 12px;
+    padding: 7px 14px;
     border-radius: 2px;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease),
+                background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
   }
 
+  .tag.visible { opacity: 1; transform: translateY(0); }
+  .tag:hover { background: var(--accent); border-color: var(--accent); color: white; box-shadow: 0 4px 12px rgba(61,122,181,0.25); }
+
   /* ── Timeline ── */
-  .timeline { position: relative; padding-left: 24px; }
+  .timeline { position: relative; padding-left: 28px; }
 
   .timeline::before {
     content: '';
     position: absolute;
-    left: 4px;
-    top: 8px;
-    bottom: 8px;
+    left: 5px; top: 10px; bottom: 10px;
     width: 1px;
     background: var(--rule);
   }
 
   .tl-item {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
   }
 
   .tl-item:last-child { margin-bottom: 0; }
+  .tl-item.visible { opacity: 1; transform: translateX(0); }
 
   .tl-item::before {
     content: '';
     position: absolute;
-    left: -20px;
-    top: 7px;
-    width: 8px;
-    height: 8px;
+    left: -23px; top: 8px;
+    width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--accent);
     border: 2px solid var(--white);
-    box-shadow: 0 0 0 1px var(--accent);
+    box-shadow: 0 0 0 1.5px var(--accent);
+    transition: transform 0.2s;
   }
+
+  .tl-item:hover::before { transform: scale(1.4); }
 
   .tl-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: 12px;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
     flex-wrap: wrap;
   }
 
-  .tl-org {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink);
-  }
+  .tl-org { font-size: 14px; font-weight: 700; color: var(--ink); }
 
   .tl-period {
     font-family: var(--mono);
@@ -227,100 +339,165 @@
     font-size: 12px;
     color: var(--accent);
     font-style: italic;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     font-family: var(--mono);
   }
 
-  .tl-desc {
-    font-size: 12.5px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
+  .tl-desc { font-size: 13px; color: var(--muted); line-height: 1.65; }
 
   /* ── Opleiding ── */
   .edu-item {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    padding: 10px 0;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
     border-bottom: 1px solid var(--rule);
     flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
   }
 
   .edu-item:last-child { border-bottom: none; }
+  .edu-item.visible { opacity: 1; transform: translateY(0); }
 
-  .edu-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--ink);
-    margin-bottom: 1px;
-  }
-
-  .edu-sub {
-    font-size: 12px;
-    color: var(--muted);
-  }
+  .edu-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+  .edu-sub { font-size: 12.5px; color: var(--muted); }
 
   .edu-period {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 10.5px;
     color: var(--muted);
     white-space: nowrap;
     flex-shrink: 0;
   }
 
+  /* ── Footer ── */
+  footer {
+    background: var(--dark);
+    padding: 64px 72px;
+    text-align: center;
+  }
+
+  .footer-name { font-size: 22px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+
+  .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+
+  .footer-link {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+  }
+
+  .footer-link:hover { color: rgba(255,255,255,0.9); }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50%       { opacity: 1; }
+  }
+
   /* ── Mobile ── */
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+
     .hero {
       grid-template-columns: 1fr;
+      grid-template-rows: 300px auto;
       min-height: unset;
     }
 
-    .hero-left { padding: 48px 28px; }
+    .hero-right { order: -1; height: 300px; }
+    .hero-right img { height: 100%; transform: translateX(-50%); }
+    .hero-left { padding: 48px 28px 60px; }
+    .hero-name { font-size: 36px; }
+    .hero-scroll { left: 28px; bottom: 24px; }
 
-    .hero-name { font-size: 34px; }
+    section { padding: 56px 0; }
+    .section-inner { padding: 0 28px; }
+    footer { padding: 48px 28px; }
+    .footer-links { gap: 16px; flex-direction: column; align-items: center; }
+  }
 
-    .hero-right {
-      height: 300px;
-    }
-
-    .section { padding: 36px 28px; }
-
+  @media (max-width: 480px) {
+    .hero-name { font-size: 30px; }
     .tl-header { flex-direction: column; gap: 2px; }
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- Hero -->
-  <div class="hero">
-    <div class="hero-left">
-      <div class="hero-label">Profiel</div>
-      <div class="hero-name">Gaston<br>Plantaz</div>
-      <div class="hero-title">Contract- en accountmanagement &nbsp;·&nbsp; Strategie &amp; operatie &nbsp;·&nbsp; Publieke sector</div>
-      <div class="hero-divider"></div>
-      <div class="hero-contact">
-        <a class="contact-item" href="tel:0610785665">06 10 78 56 65</a>
-        <a class="contact-item" href="mailto:gastonplantaz@gmail.com">gastonplantaz@gmail.com</a>
-        <span class="contact-item">Nijmegen</span>
-      </div>
+<!-- Nav -->
+<nav id="nav">
+  <div class="nav-name">Gaston Plantaz</div>
+  <ul class="nav-links">
+    <li><a href="#over-mij">Over mij</a></li>
+    <li><a href="#ervaring">Ervaring</a></li>
+    <li><a href="#opleiding">Opleiding</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-label">Profiel</div>
+    <div class="hero-name">Gaston<br>Plantaz</div>
+    <div class="hero-title">Contract- en accountmanagement &nbsp;&middot;&nbsp; Strategie &amp; operatie &nbsp;&middot;&nbsp; Publieke sector</div>
+    <div class="hero-divider"></div>
+    <div class="hero-contact">
+      <span class="contact-item" onclick="copyText('0610785665', this)">
+        &#9742; 06 10 78 56 65 <span class="copy-tip">Gekopieerd</span>
+      </span>
+      <span class="contact-item" onclick="copyText('gastonplantaz@gmail.com', this)">
+        &#9993; gastonplantaz@gmail.com <span class="copy-tip">Gekopieerd</span>
+      </span>
+      <span class="contact-item">&#9679; Nijmegen</span>
     </div>
-    <div class="hero-right">
-      <img src="foto.png" alt="Gaston Plantaz">
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </div>
+  <div class="hero-right">
+    <img src="foto.png" alt="Gaston Plantaz">
+  </div>
+</div>
 
-  <!-- Introductie -->
-  <div class="section intro">
+<!-- Over mij -->
+<section id="over-mij">
+  <div class="section-inner">
     <div class="section-label">Over mij</div>
-    <p>Na ruim tien jaar in commerciële omgevingen, op het snijvlak van strategie, contractmanagement en stakeholdermanagement, zet ik mijn kracht in op plekken waar goede dienstverlening er echt toe doet. Analytisch, verbindend en gewend te schakelen tussen belangen, niveaus en disciplines. Met ervaring aan beide kanten van de contracttafel ben ik snel inzetbaar in complexe samenwerkingsverbanden.</p>
+    <div class="section-title">Introductie</div>
+    <p class="intro-text">Na ruim tien jaar in commerciële omgevingen, op het snijvlak van strategie, contractmanagement en stakeholdermanagement, zet ik mijn kracht in op plekken waar goede dienstverlening er echt toe doet. Analytisch, verbindend en gewend te schakelen tussen belangen, niveaus en disciplines. Met ervaring aan beide kanten van de contracttafel ben ik snel inzetbaar in complexe samenwerkingsverbanden.</p>
   </div>
+</section>
 
-  <!-- Competenties -->
-  <div class="section">
+<!-- Competenties -->
+<section id="competenties" style="background: var(--bg);">
+  <div class="section-inner">
     <div class="section-label">Kerncompetenties</div>
+    <div class="section-title">Wat ik meeneem</div>
     <div class="tags">
       <span class="tag">Contract- &amp; accountmanagement</span>
       <span class="tag">SLA- en KPI-sturing</span>
@@ -330,12 +507,17 @@
       <span class="tag">Verandermanagement</span>
       <span class="tag">Publieke sector</span>
       <span class="tag">Strategie &amp; innovatie</span>
+      <span class="tag">Producten- en dienstencatalogus</span>
+      <span class="tag">Dashboards &amp; managementinfo</span>
     </div>
   </div>
+</section>
 
-  <!-- Werkervaring -->
-  <div class="section">
-    <div class="section-label">Werkervaring</div>
+<!-- Werkervaring -->
+<section id="ervaring">
+  <div class="section-inner">
+    <div class="section-label">Loopbaan</div>
+    <div class="section-title">Werkervaring</div>
     <div class="timeline">
 
       <div class="tl-item">
@@ -394,15 +576,18 @@
 
     </div>
   </div>
+</section>
 
-  <!-- Opleiding -->
-  <div class="section">
+<!-- Opleiding -->
+<section id="opleiding" style="background: var(--bg);">
+  <div class="section-inner">
     <div class="section-label">Opleiding</div>
+    <div class="section-title">Academische achtergrond</div>
 
     <div class="edu-item">
       <div>
         <div class="edu-title">MSc. Business Administration — Strategy &amp; Innovation</div>
-        <div class="edu-sub">Radboud Universiteit Nijmegen &nbsp;·&nbsp; Scriptie: 8</div>
+        <div class="edu-sub">Radboud Universiteit Nijmegen &nbsp;&middot;&nbsp; Scriptie: 8</div>
       </div>
       <span class="edu-period">2011 – 2013</span>
     </div>
@@ -416,7 +601,64 @@
     </div>
 
   </div>
+</section>
 
-</div>
+<!-- Footer -->
+<footer id="contact">
+  <div class="footer-name">Gaston Plantaz</div>
+  <div class="footer-links">
+    <span class="footer-link" onclick="copyText('0610785665', this)">
+      &#9742; 06 10 78 56 65 <span class="copy-tip">Gekopieerd</span>
+    </span>
+    <span class="footer-link" onclick="copyText('gastonplantaz@gmail.com', this)">
+      &#9993; gastonplantaz@gmail.com <span class="copy-tip">Gekopieerd</span>
+    </span>
+    <span class="footer-link">&#9679; Nijmegen</span>
+  </div>
+</footer>
+
+<script>
+  // Nav na scrollen voorbij hero
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('visible', window.scrollY > window.innerHeight * 0.6);
+  }, { passive: true });
+
+  // Scroll animaties
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const delay = parseInt(entry.target.dataset.delay) || 0;
+        setTimeout(() => entry.target.classList.add('visible'), delay);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.tl-item').forEach((el, i) => {
+    el.dataset.delay = i * 100;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.edu-item').forEach((el, i) => {
+    el.dataset.delay = i * 120;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.tag').forEach((el, i) => {
+    el.dataset.delay = i * 55;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.intro-text').forEach(el => observer.observe(el));
+
+  // Click-to-copy
+  function copyText(text, el) {
+    navigator.clipboard.writeText(text).then(() => {
+      el.classList.add('copied');
+      setTimeout(() => el.classList.remove('copied'), 1800);
+    });
+  }
+</script>
 </body>
 </html>
